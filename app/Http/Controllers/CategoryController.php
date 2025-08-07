@@ -28,14 +28,18 @@ class CategoryController extends Controller
     /**
      * Guarda una nueva categoría en la base de datos.
      */
-    public function store(Request $request)
+      public function store(Request $request)
     {
-        $request->validate([
+        // 1. Validar los datos del formulario
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
         ]);
 
-        Auth::user()->categories()->create($request->all());
+        // 2. Crear una nueva instancia de Categoría
+        // Asegúrate de que el campo sea 'name', no 'nombre'
+        auth()->user()->categories()->create($validated);
 
+        // 3. Redireccionar con un mensaje de éxito
         return redirect()->route('categories.index')->with('success', 'Categoría creada exitosamente.');
     }
 
